@@ -3,7 +3,7 @@ import pandas as pd
 
 class DataManager:
 
-    def __init(self):
+    def __init__(self):
         return self
 
     def read_csv(self, url):

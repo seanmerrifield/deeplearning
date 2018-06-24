@@ -1,5 +1,5 @@
 import pandas as pd
-
+import numpy as np
 
 class DataManager:
 
@@ -93,3 +93,8 @@ class DataManager:
             self.data.loc[:, field] = (self.data[field] - mean) / std
 
         return self.data
+
+    def one_hot_encode(self, fields=[]):
+        for field in fields:
+            self.data[field]
+

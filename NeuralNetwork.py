@@ -1,12 +1,18 @@
 import tensorflow as tf
 import numpy as np
 
-class NeuralNetwork():
+class NeuralNetwork:
 
-    def __init__(self):
+    def __init__(self, train_f, train_l, valid_f, valid_l, test_f, test_l):
+        #Preprocess data
+        self.train_f = train_f
+        self.train_l = train_l,
+        self.valid_f = valid_f,
+        self.valid_l = valid_l,
+        self.test_f = test_f,
+        self.test_l = test_l
 
-
-    def input_batch(self, shape, name, t = "float")
+    def input_batch(self, shape, name, t = "float"):
         """
         Return an in placeholder Tensor 
         : shape: Shape of the images
@@ -16,30 +22,29 @@ class NeuralNetwork():
         """
         if t is "int":
             t = tf.int32
-
         
         return tf.placeholder(t, shape=shape, name=name)
 
 
     def input_scalar(self, name, t="float"):
-         """
-        Return an in placeholder scalar Tensor 
+        """
+        Return an in placeholder scalar Tensor
         : t:        Type of input ("float" or "int") (Optional)
         : return:   A placeholder scalar tensor
         """
         if t is "int":
-            t = tf.int32 
+            t = tf.int32
 
         return tf.placeholder(t, name=name)
 
-    def weights(self, shape, n_outputs, name, std_dev=0.5, ):
-          """
+    def weights(self, shape, n_outputs, name, std_dev=0.5):
+        """
             Return weights variable tensor initialized with truncated normal distribution
             : shape:       Shape of variable tensor
             : name:        Name of tensor
             : std_dev:     Standard dev (Optional)
             : return:      A variable tensor with initialized weights
-        """   
+        """
         W = tf.Variable(
                         tf.truncated_normal(
                         shape=shape,
@@ -99,37 +104,40 @@ class NeuralNetwork():
 
         return conv_layer
 
-    def max_pool(self, k_size, stries):
-         """
-            Return biases variable tensor initialized with zeroes
-            : n_outputs:   Number of outputs
-            : strides:     Strides in each direction (2 element array)
-            : return:      A variable tensor of biases
-        """         
+    def max_pool(self, conv_layer, k_size, strides):
+        """
+        Return biases variable tensor initialized with zeroes
+        : n_outputs:   Number of outputs
+        : k_size:      Filter size (tuple)
+        : strides:     Strides in each direction (tuple)
+        : return:      A variable tensor of biases
+        """
 
         conv_layer = tf.nn.max_pool(conv_layer, 
-                                    ksize = [1, pool_ksize[0], pool_ksize[1], 1], 
-                                    strides = [1, pool_strides[0], pool_strides[1], 1],
+                                    ksize = [1, k_size[0], k_size[1], 1],
+                                    strides = [1, strides[0], strides[1], 1],
                                     padding = 'SAME')
 
         return conv_layer
 
 
-    def fully_conn(self, x_tensor, num_outputs):
+    def fully_conn(self, x_tensor, n_outputs, activation):
         """
         Apply a fully connected layer to x_tensor using weight and bias
         : x_tensor: A 2-D tensor where the first dimension is batch size.
-        : num_outputs: The number of output that the new tensor should be.
+        : n_outputs: The number of output that the new tensor should be.
+        : activation: The activation function type ('RELU', 'Sigmoid')
         : return: A 2-D tensor where the second dimension is num_outputs.
         """
         
         input_shape = x_tensor.get_shape().as_list()
         
-        W = self.weights((input_shape[1], num_outputs), 
-                        stddev=0.05), 
-                        name='W_full')
+        W = self.weights(shape=input_shape[1],
+                         n_outputs=n_outputs,
+                         stddev=0.05,
+                         name='W_full')
 
-        b = self.biases(num_outputs, name = 'b_full')
+        b = self.biases(n_outputs, name = 'b_full')
          
         fully_conn = tf.add( tf.matmul(x_tensor, W), b)
         fully_conn = tf.nn.relu(fully_conn, name = 'fully_conn')
@@ -166,7 +174,8 @@ class NeuralNetwork():
         accuracy = tf.reduce_mean(tf.cast(correct_pred, tf.float32), name='accuracy')
         return accuracy
 
-    def train(self, batch_function, optimizer, cost_func, accuracy_func, epochs=1000, batch_size=256, keep_prob=0.8):
+    def train(self, batch_function, optimizer, cost, accuracy, epochs=1000, batch_size=256, keep_prob=0.8):
+
 
         with tf.Session() as sess:
             # Initializing the variables
@@ -177,21 +186,30 @@ class NeuralNetwork():
                 batch_i = 1
                 for batch_features, batch_labels in batch_function(batch_i, batch_size):
 
-                        session.run(optimizer, 
-                                    feed_dict = {x: batch_features, 
-                                                 y: batch_labels, 
-                                                 keep_prob: keep_prob}
+                        sess.run(optimizer,
+                                    feed_dict = {'x': batch_features,
+                                                 'y': batch_labels,
+                                                 'keep_prob': keep_prob}
                                                 )
 
-                        loss = session.run(cost, feed_dict = {x: feature_batch, y: label_batch, keep_prob: 1.0})
-                        valid_loss = session.run(cost, feed_dict = {x: valid_features, y:valid_labels, keep_prob: 1.0})
+                        loss = sess.run(cost, feed_dict = {'x': batch_features,
+                                                           'y': batch_labels,
+                                                           'keep_prob': 1.0})
+                        valid_loss = sess.run(cost, feed_dict = {'x': self.valid_f,
+                                                                 'y': self.valid_l,
+                                                                 'keep_prob': 1.0})
                      
-                        train_accuracy = session.run(accuracy, feed_dict = {x: feature_batch, y:label_batch, keep_prob: 1.0})
-                        valid_accuracy = session.run(accuracy, feed_dict = {x: valid_features, y: valid_labels, keep_prob: 1.0})
+                        train_accuracy = sess.run(accuracy, feed_dict = {'x': batch_features,
+                                                                         'y':batch_labels,
+                                                                         'keep_prob': 1.0})
+
+                        valid_accuracy = sess.run(accuracy, feed_dict = {'x': self.valid_f,
+                                                                         'y': self.valid_l,
+                                                                         'keep_prob;': 1.0})
                                     
 
-                print('Epoch {:>2}, CIFAR-10 Batch {}:  '.format(epoch + 1, batch_i), end='')
-                self.print_stats(sess, batch_features, batch_labels, cost, accuracy)
+                print('Epoch {:>2}, Batch {}:  '.format(epoch + 1, batch_i), end='')
+                self.print_stats(sess, loss, train_accuracy, valid_loss, valid_accuracy)
 
 
     def print_stats(self,loss,train_accuracy,valid_loss,valid_accuracy):

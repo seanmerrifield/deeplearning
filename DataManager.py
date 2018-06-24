@@ -1,17 +1,18 @@
 import pandas as pd
-import numpy as np
+import matplotlib.pyplot as plt
 
 class DataManager:
 
     def __init__(self):
-        return self
+        return None
 
-    def read_csv(self, url):
+    def read_csv(self, file_path):
         """
         Read csv file into a pandas dataframe
+        : file_path: Path to CSV file
         : return: Dataframe of csv file.
         """
-        self.data = pd.read_csv(url)
+        self.data = pd.read_csv(file_path)
         return self.data
 
     def inspect(self):
@@ -20,6 +21,19 @@ class DataManager:
         :return: Dataframe of top rows
         '''
         return self.data.head()
+
+    def plot(self, x_field, y_field, figsize=[15,4]):
+
+        return self.data.plot(x=x_field, y=y_field, figsize=figsize)
+
+    def describe(self, fields=[], excludes=[]):
+        """
+        Return statistical descriptions of fields in dataframe
+        : fields:   List of fields to describe
+        : excludes: List of fields to exclude
+        :return: 
+        """
+        return self.data.describe()
 
     def columns(self):
         '''
@@ -95,6 +109,26 @@ class DataManager:
         return self.data
 
     def one_hot_encode(self, fields=[]):
+        """
+        One-hot encode fields
+        :param fields: list of fields (column headers) to normalize
+        :return: Dataframe with one-hot enconded fields
+        """
         for field in fields:
-            self.data[field]
+            self.data[field] = pd.get_dummies(self.data[field])
 
+        return self.data
+
+    def to_datetime(self, fields):
+        if not len(fields):
+            pd.to_date_time(self.data[fields])
+
+        for field in fields:
+            pd.to_date_time(self.data[field])
+
+        return self.data
+
+
+    def group_dates(self, field, freq="M"):
+        self.data[field] = pd.to_datetime(self.data[field])
+        return self.data.groupby(pd.Grouper(key=field, freq=freq))

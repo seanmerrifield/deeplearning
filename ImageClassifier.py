@@ -14,6 +14,8 @@ class ImageClassifier(NeuralNetwork):
 
         self.build_graph()
 
+        return self
+
     def input_image(self, image_shape):
         """
         Return a Tensor for a batch of image input

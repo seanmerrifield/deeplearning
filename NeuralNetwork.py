@@ -12,6 +12,8 @@ class NeuralNetwork:
         self.test_f = test_f,
         self.test_l = test_l
 
+        return self
+
     def input_batch(self, shape, name, t = "float"):
         """
         Return an in placeholder Tensor 

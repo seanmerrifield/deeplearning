@@ -6,9 +6,9 @@ import tarfile
 class FileManager:
 
     def __init__(self):
-        return self
+        return None
 
-    def get_from_url(self,url,file_name, desc):
+    def get_from_url(self,url,file_name, desc=None):
         """
         Download a file from provided url path
         : url:          URL string of file to download
@@ -32,8 +32,18 @@ class FileManager:
                     file_name,
                     pbar.hook)
 
-def tar_extract(self,tarfile, file_path):
+    def tar_extract(self,file_path, save_path):
 
-    with tarfile.open(file_path) as tar:
-        tar.extractall()
-        tar.close()
+        with tarfile.open(file_path) as tar:
+            tar.extractall(path=save_path)
+            tar.close()
+
+        return True
+
+    def unpack(self, file_path, save_path):
+        #Tar extract
+        if '.tar' in file_path: self.tar_extract(file_path, save_path)
+
+        #Todo: Finish unzip function
+        if '.zip' in file_path: pass
+        return True

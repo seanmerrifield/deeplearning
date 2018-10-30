@@ -77,8 +77,8 @@ class ImageManager(FileManager):
             self._preprocess_and_save(
                 features[:-validation_count],
                 labels[:-validation_count],
-                'preprocess_batch_' + str(batch_i) + '.p')
-
+                Path(self.root, 'preprocess_batch_' + str(batch_i) + '.p')
+            )
             # Use a portion of training batch for validation
             valid_features.extend(features[-validation_count:])
             valid_labels.extend(labels[-validation_count:])
@@ -87,7 +87,7 @@ class ImageManager(FileManager):
         self._preprocess_and_save(
             np.array(valid_features),
             np.array(valid_labels),
-            'preprocess_validation.p')
+            Path(self.root, 'preprocess_validation.p'))
 
         with open(self.root + '/test_batch', mode='rb') as file:
             batch = pickle.load(file, encoding='latin1')
@@ -100,7 +100,7 @@ class ImageManager(FileManager):
         self._preprocess_and_save(
             np.array(test_features),
             np.array(test_labels),
-            'preprocess_test.p')
+            Path(self.root, 'preprocess_test.p'))
 
         return True
 
@@ -108,7 +108,8 @@ class ImageManager(FileManager):
         """
         Load a batch of the dataset
         """
-        with open(dir_path + '/data_batch_' + str(batch_id), mode='rb') as file:
+        file_path = Path(dir_path, 'cifar-10-batches-py/data_batch_' + str(batch_id))
+        with open(file_path, mode='rb') as file:
             batch = pickle.load(file, encoding='latin1')
 
         features = batch['data'].reshape((len(batch['data']), 3, 32, 32)).transpose(0, 2, 3, 1)

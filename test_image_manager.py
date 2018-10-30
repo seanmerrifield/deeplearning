@@ -4,7 +4,7 @@ from pathlib import Path
 
 class TestImageManager(unittest.TestCase):
 
-    im = ImageManager(path = 'input')
+    im = ImageManager(path = 'work/input')
 
     def test_download(self):
 

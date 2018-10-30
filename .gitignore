@@ -1,5 +1,13 @@
 .idea
+.ipynb_checkpoints
 work
 bicycle
 football
+venv
 
+object_detection/object_detection
+object_detection/models
+object_detection/training
+object_detection/__pycache__
+object_detection/.ipynb_checkpoints
+object_detection/images

@@ -1,0 +1,1 @@
+2018-11-18 23:20:44,184 - Training Run - INFO - Starting training over 1 epochs

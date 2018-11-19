@@ -54,7 +54,7 @@ test_dataset = FacialKeypointsDataset(csv_file='./data/test_frames_keypoints.csv
 
 ### PREPARE NETWORK ###
 
-run_dir = helper.create_training_dir()
+
 
 # train network
 batch_size = 10
@@ -62,6 +62,7 @@ n_epochs = 1 # start small, and increase when you've decided on your model struc
 lr = 0.001
 
 
+run_dir = helper.create_training_dir()
 
 net = Net()
 trainer = Trainer(net, name="Training Run", root_dir=run_dir)

@@ -1,2 +1,0 @@
-2018-11-18 22:56:36,145 - Training Run - INFO - Starting training over 1 epochs
-2018-11-18 23:16:56,717 - Training Run - INFO - Epoch: 1, Batch: 10, Avg. Loss: 0.585438248515129

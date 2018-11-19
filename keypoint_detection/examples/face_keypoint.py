@@ -21,12 +21,21 @@ from trainer import Trainer
 URL = "https://s3.amazonaws.com/video.udacity-data.com/topher/2018/May/5aea1b91_train-test-data/"
 DATA_FILE = 'train-test-data.zip'
 DOWNLOAD_PATH = './data/'
-if len(os.listdir(DOWNLOAD_PATH)) == 0:
-    r = requests.get(URL + DATA_FILE)
-    assert(r.ok), 'Input data files could not be downloaded from URL'
-    z = zipfile.ZipFile(io.BytesIO(r.content))
-    z.extractall(DOWNLOAD_PATH)
 
+
+if not Path(DOWNLOAD_PATH).exists(): Path(DOWNLOAD_PATH).mkdir()
+
+if not Path(DOWNLOAD_PATH, DATA_FILE).exists():
+    print("Downloading data...")
+    r = requests.get(URL + DATA_FILE, stream=True)
+    assert(r.ok), 'Input data files could not be downloaded from URL'
+    with open(str(Path(DOWNLOAD_PATH, DATA_FILE)), 'wb+') as f:
+        for chunk in r.iter_content(chunk_size=1024):
+            if chunk: f.write(chunk)
+
+    z = zipfile.ZipFile(str(Path(DOWNLOAD_PATH, DATA_FILE)))
+    z.extractall(DOWNLOAD_PATH)
+    print("Downloading and extraction complete.")
 
 
 

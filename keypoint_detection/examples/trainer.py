@@ -1,6 +1,8 @@
 import logging
 import time
 from pathlib import Path
+import matplotlib
+matplotlib.use('agg')
 import matplotlib.pyplot as plt
 
 import torch

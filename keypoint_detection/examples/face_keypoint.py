@@ -26,7 +26,7 @@ if not Path(DOWNLOAD_PATH).exists(): Path(DOWNLOAD_PATH).mkdir()
 if not Path(DOWNLOAD_PATH, DATA_FILE).exists():
     r = requests.get(URL + DATA_FILE, stream=True)
     assert(r.ok), 'Input data files could not be downloaded from URL'
-    with open(str(PATH(DOWNLOAD_PATH, DATA_FILE)), 'wb+') as f:
+    with open(str(Path(DOWNLOAD_PATH, DATA_FILE)), 'wb+') as f:
         for chunk in r.iter_content(chunk_size=1024):
             if chunk: f.write(chunk)
 

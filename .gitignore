@@ -5,6 +5,7 @@ bicycle
 football
 venv
 data
+__pycache__
 object_detection/object_detection
 object_detection/models
 object_detection/training

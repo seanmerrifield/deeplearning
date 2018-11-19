@@ -1,0 +1,13 @@
+Training Parameters
+Learning Rate: 0.001
+Batch Size: 10
+Loss Function: Mean Squared Error
+Network Summary
+Net(
+  (conv1): Conv2d(1, 32, kernel_size=(5, 5), stride=(1, 1), padding=(2, 2))
+  (conv2): Conv2d(32, 64, kernel_size=(5, 5), stride=(1, 1), padding=(2, 2))
+  (pool): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  (full1): Linear(in_features=200704, out_features=1000, bias=True)
+  (dropout): Dropout(p=0.4)
+  (full2): Linear(in_features=1000, out_features=136, bias=True)
+)

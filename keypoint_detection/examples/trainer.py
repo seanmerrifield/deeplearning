@@ -192,7 +192,7 @@ class Trainer:
         self._log('INFO', "Finished training")
         train_time = (start - time.time()) / 60.0
 
-        self._log('INFO', "Training took {} minutes", train_time)
+        self._log('INFO', "Training took {} minutes".format(train_time))
 
         self._save_model()
         self._log('INFO', "Saved trained model")

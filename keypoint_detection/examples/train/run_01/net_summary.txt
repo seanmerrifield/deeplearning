@@ -1,1 +1,0 @@
-Network Summary<generator object Module.modules at 0x120f77468>

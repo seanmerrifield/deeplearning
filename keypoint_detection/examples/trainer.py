@@ -18,6 +18,7 @@ class Trainer:
     LOSS_PLOT = "loss.png"
 
     MSE = "Mean Squared Error"
+    L1 = "L1 Loss"
     CROSS_ENTROPY = "Cross Entropy"
 
     ADAM = "Adam Optimizer"
@@ -123,7 +124,7 @@ class Trainer:
         """
         self.lr = lr
         if type == self.ADAM:
-            self.opt = nn.Adam(self.net.parameters(), lr=lr)
+            self.opt = optim.Adam(self.net.parameters(), lr=lr)
         elif type == self.SGD:
             self.opt = optim.SGD(self.net.parameters(), lr=lr, momentum=0.9)
         else:
@@ -139,6 +140,7 @@ class Trainer:
             self.type = type
             self.loss = nn.MSELoss()
         elif    type == self.CROSS_ENTROPY: self.loss = nn.CrossEntropyLoss()
+        elif    type == self.L1: self.loss = nn.L1Loss()
         else:
             raise Exception
 

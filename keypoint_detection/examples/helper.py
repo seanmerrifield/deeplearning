@@ -78,18 +78,20 @@ def display_losses(dir):
         losses = log_losses(log_path)
         summary = summary_dict(summary_path)
 
-        batches = np.arange(0, summary['batch_size']*len(losses),  summary['batch_size'])
+        batches = np.arange(0, summary['batch_size']*len(losses)*10,  summary['batch_size'])
 
         data = [[int(x), float(y)] for x,y in zip(batches, losses)]
         chart.add_data_set(data, series_type='line', name="Conv: {},  "
+                                        "Out: {},  "
                                         "Kernel: {},  "
                                         "LR: {},  "
                                         "Batch: {},  "
                                         "Drop: {}".format(summary['n_conv'],
-                                                                int(summary['kernel_size']),
-                                                                summary['lr'],
-                                                                summary['batch_size'],
-                                                                summary['p']))
+                                                          summary['n_full'],
+                                                            int(summary['kernel_size']),
+                                                            summary['lr'],
+                                                            summary['batch_size'],
+                                                            summary['p']))
     chart.save_file()
     return chart
 

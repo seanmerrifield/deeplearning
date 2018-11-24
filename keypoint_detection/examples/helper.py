@@ -56,7 +56,7 @@ def create_training_dir():
     if len(list(train_dir.glob('run_*'))) == 0:
         run_num = 1
     else:
-        last_path = list(train_dir.glob('run_*'))[-1]
+        last_path = sorted(list(train_dir.glob('run_*')))[-1]
         last_run = int(str(last_path).split("_")[-1])
         run_num = last_run + 1
 

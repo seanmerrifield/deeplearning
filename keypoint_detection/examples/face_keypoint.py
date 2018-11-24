@@ -79,7 +79,7 @@ trainer = Trainer(net, name="Training Run", root_dir=run_dir)
 trainer.train_set(transformed_dataset, batch_size)
 trainer.test_set(test_dataset, batch_size)
 trainer.loss_fn(trainer.MSE)
-trainer.optimizer(lr=lr)
+trainer.optimizer(trainer.ADAM, lr=lr)
 
 ### RUN INFERENCE IN TEST SET ###
 

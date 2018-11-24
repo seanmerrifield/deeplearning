@@ -20,6 +20,9 @@ class Trainer:
     MSE = "Mean Squared Error"
     CROSS_ENTROPY = "Cross Entropy"
 
+    ADAM = "Adam Optimizer"
+    SGD = "Stochastic Gradient Descent"
+
     def __init__(self, net, name, root_dir=None, log_path=None):
 
         self.name = name
@@ -111,19 +114,26 @@ class Trainer:
         """
         self.net = net
 
-    def optimizer(self, lr=0.001):
+    def optimizer(self, type, lr=0.001):
         """
         Sets Pytorch optimizer for training
-        @param lr:  Learning rate
+        @param type:    Optimization algorithm
+        @param lr:      Learning rate
         @return:    None
         """
         self.lr = lr
-        self.opt = optim.SGD(self.net.parameters(), lr=lr)
+        if type == self.ADAM:
+            self.opt = nn.Adam(self.net.parameters(), lr=lr)
+        elif type == self.SGD:
+            self.opt = optim.SGD(self.net.parameters(), lr=lr, momentum=0.9)
+        else:
+            raise Exception
 
     def loss_fn(self, type):
         """
         Sets Pytorch loss function for training
-        @return:    None
+        @param type:    Type of loss function
+        @return:        None
         """
         if  type == self.MSE:
             self.type = type

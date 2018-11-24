@@ -190,7 +190,7 @@ class Trainer:
                     running_loss = 0.0
 
         self._log('INFO', "Finished training")
-        train_time = (start - time.time()) / 60.0
+        train_time = (time.time() - start) / 60.0
 
         self._log('INFO', "Training took {} minutes".format(train_time))
 
@@ -213,7 +213,7 @@ class Trainer:
         plt.xlabel('10\'s of batches')
         plt.ylabel('loss')
         plt.ylim(0, 1)  # consistent scale
-        plt.save_fig(str(Path(self.root, self.LOSS_PLOT)))
+        plt.savefig(str(Path(self.root, self.LOSS_PLOT)))
         return plt
 
     def sample_output(self):

@@ -1,8 +1,10 @@
-import matplotlib
-matplotlib.use('agg')
+# import matplotlib
+# matplotlib.use('agg')
+from highcharts import Highchart
 import matplotlib.pyplot as plt
 import numpy as np
 from pathlib import Path
+import re
 
 def show_all_keypoints(image, predicted_key_pts, gt_pts=None):
     """Show image with predicted keypoints"""
@@ -64,3 +66,127 @@ def create_training_dir():
 
     return str(run_dir)
 
+def display_losses(dir):
+    assert Path(dir).exists(), "Directory provided doesn't exist"
+
+    chart = create_chart()
+
+    for path in Path(dir).glob('run_*'):
+        log_path = Path(path, 'log.txt')
+        summary_path = Path(path, 'net_summary.txt')
+
+        losses = log_losses(log_path)
+        summary = summary_dict(summary_path)
+
+        batches = np.arange(0, summary['batch_size']*len(losses),  summary['batch_size'])
+
+        data = [[int(x), float(y)] for x,y in zip(batches, losses)]
+        chart.add_data_set(data, series_type='line', name="Conv: {},  "
+                                        "Kernel: {},  "
+                                        "LR: {},  "
+                                        "Batch: {},  "
+                                        "Drop: {}".format(summary['n_conv'],
+                                                                int(summary['kernel_size']),
+                                                                summary['lr'],
+                                                                summary['batch_size'],
+                                                                summary['p']))
+    chart.save_file()
+    return chart
+
+
+def create_chart():
+
+    chart = Highchart()
+    options = {
+        'title': {
+            'text': 'Loss over time for various models'
+        },
+        'xAxis': {
+            'title': {
+                'text': 'Number of images'
+            },
+            'maxPadding': 0.05,
+            'showLastLabel': True
+        },
+        'yAxis': {
+            'title': {
+                'text': 'Loss'
+            },
+            'lineWidth': 2
+        },
+        'legend': {
+            'enabled': True,
+            'layout': 'vertical',
+            'align': 'left',
+            'verticalAlign': 'middle'
+        },
+        'tooltip': {
+            'headerFormat': '<b>{series.name}</b><br/>',
+            'pointFormat': '{point.x} images: Loss = {point.y}'
+        }
+    }
+    chart.set_dict_options(options)
+    return chart
+
+def log_losses(path):
+    losses = []
+    with open(path, 'r') as f:
+        for line in f.readlines():
+            line = line.strip()
+            if len(line.split(",")) < 2: continue
+            for val in line.split(","):
+                if len(val.split(": ")) < 2: continue
+                k,v = val.split(": ")
+                if 'loss' in k.lower(): losses.append(float(v))
+
+    return losses
+
+
+def summary_dict(path):
+
+    s = {'n_conv': 0, 'n_full': 0}
+
+    with open(path, 'r') as f:
+
+        for line in f.readlines():
+            line = line.strip()
+
+            if len(line.split(":")) < 2: continue
+
+            k, v = line.split(":")[0], line.split(":")[1]
+
+            if "learning rate" in k.lower():
+                s["lr"] = float(v)
+                continue
+            if "batch size" in k.lower():
+                s["batch_size"] = int(v)
+                continue
+            if "loss function" in k.lower():
+                s["loss"] = v
+                continue
+
+
+            content = re.search('\((.*)\)', v)
+            if content == None: continue
+            else: content = content.group(1)
+
+            pairs = content.split(",")
+            for pair in pairs:
+                if len(pair.split("=")) < 2: continue
+                p_key, p_val = pair.split("=")
+                p_key = p_key.strip()
+                if p_key in s: continue
+
+                if p_val[0] == "(": s[p_key] = p_val[1:]
+                else: s[p_key] = p_val
+
+
+
+            if "conv2d" in line.lower(): s['n_conv'] += 1
+
+            if "full" in line.lower(): s['n_full'] += 1
+
+    if 'p' not in s: s['p'] = 0
+    return s
+
+display_losses('./train')

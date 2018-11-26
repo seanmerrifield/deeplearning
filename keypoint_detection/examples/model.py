@@ -4,19 +4,25 @@ import torch.nn.functional as F
 # Define Network
 class Net(nn.Module):
 
-    def __init__(self):
+    def __init__(self, image_size):
+
+        self.im_size = image_size
+
         super(Net, self).__init__()
 
-        self.conv1 = nn.Conv2d(1, 32, kernel_size=5, stride=1, padding=2)
-        self.conv2 = nn.Conv2d(32, 64, kernel_size=5, stride=1, padding=2)
-        self.conv3 = nn.Conv2d(64, 128, kernel_size=5, stride=1, padding=2)
-        # self.conv4 = nn.Conv2d(128, 256, kernel_size=5, stride=1, padding=2)
+        self.conv1 = nn.Conv2d(1, 32, kernel_size=4, stride=1, padding=0)
+        self.conv2 = nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=0)
+        self.conv3 = nn.Conv2d(64, 128, kernel_size=2, stride=1, padding=0)
+        self.conv4 = nn.Conv2d(128, 256, kernel_size=1, stride=1, padding=0)
 
         self.pool = nn.MaxPool2d(2, 2)
 
-        self.full1 = nn.Linear(128 * 28 * 28, 1000)
+        self.full1 = nn.Linear(256 * 5 * 5, 1000)
+        #self.full1 = nn.Linear(128 * 28 * 28, 1000)
         self.dropout = nn.Dropout(p=0.4)
         self.full2 = nn.Linear(1000, 136)
+
+
 
     def forward(self, x):
 

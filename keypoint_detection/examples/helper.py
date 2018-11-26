@@ -89,7 +89,7 @@ def display_losses(dir):
                                         "Drop: {}".format(summary['n_conv'],
                                                           summary['n_full'],
                                                             int(summary['kernel_size']),
-                                                            summary['lr'],
+                                                            summary['loss'],
                                                             summary['batch_size'],
                                                             summary['p']))
     chart.save_file()
@@ -114,7 +114,8 @@ def create_chart():
             'title': {
                 'text': 'Loss'
             },
-            'lineWidth': 2
+            'lineWidth': 2,
+            'max': 1
         },
         'legend': {
             'enabled': True,
@@ -191,4 +192,4 @@ def summary_dict(path):
     if 'p' not in s: s['p'] = 0
     return s
 
-#display_losses('./train')
+display_losses('./train')

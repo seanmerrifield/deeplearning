@@ -43,7 +43,7 @@ if not Path(DOWNLOAD_PATH, DATA_FILE).exists():
 ### PREPARE DATA ###
 
 # order matters! i.e. rescaling should come before a smaller crop
-data_transform = transforms.Compose([Rescale(250),RandomCrop(224),Normalize(),ToTensor()])
+data_transform = transforms.Compose([Rescale(100),RandomCrop(96),Normalize(),ToTensor()])
 
 # create the transformed dataset
 transformed_dataset = FacialKeypointsDataset(csv_file='./data/training_frames_keypoints.csv',

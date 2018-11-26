@@ -191,4 +191,4 @@ def summary_dict(path):
     if 'p' not in s: s['p'] = 0
     return s
 
-display_losses('./train')
+#display_losses('./train')

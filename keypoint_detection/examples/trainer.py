@@ -19,6 +19,7 @@ class Trainer:
 
     MSE = "Mean Squared Error"
     L1 = "L1 Loss"
+    L1_SMOOTH = "Smooth L1 Loss"
     CROSS_ENTROPY = "Cross Entropy"
 
     ADAM = "Adam Optimizer"
@@ -136,11 +137,11 @@ class Trainer:
         @param type:    Type of loss function
         @return:        None
         """
-        if  type == self.MSE:
-            self.type = type
-            self.loss = nn.MSELoss()
+        self.type = type
+        if  type == self.MSE: self.loss = nn.MSELoss()
         elif    type == self.CROSS_ENTROPY: self.loss = nn.CrossEntropyLoss()
         elif    type == self.L1: self.loss = nn.L1Loss()
+        elif    type == self.L1_SMOOTH: self.loss = nn.SmoothL1Loss()
         else:
             raise Exception
 
@@ -162,11 +163,13 @@ class Trainer:
         self.loss_over_time = []
 
         for epoch in range(epochs):  # loop over the dataset multiple times
-
+            print("Epoch: ", epoch)
             running_loss = 0.0
 
             # train on batches of data, assumes you already have train_loader
             for batch_i, data in enumerate(self.train_loader):
+                print("Batch: ", batch_i)
+
                 # get the input images and their corresponding labels
                 images = data['image']
                 key_pts = data['keypoints']

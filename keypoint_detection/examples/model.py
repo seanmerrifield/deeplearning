@@ -18,7 +18,6 @@ class Net(nn.Module):
         self.pool = nn.MaxPool2d(2, 2)
 
         self.full1 = nn.Linear(256 * 5 * 5, 1000)
-        #self.full1 = nn.Linear(128 * 28 * 28, 1000)
         self.dropout = nn.Dropout(p=0.4)
         self.full2 = nn.Linear(1000, 136)
 
@@ -30,7 +29,8 @@ class Net(nn.Module):
         x = self.pool(F.relu(self.conv1(x)))
         x = self.pool(F.relu(self.conv2(x)))
         x = self.pool(F.relu(self.conv3(x)))
-        # x = self.pool(F.relu(self.conv4(x)))
+        x = self.pool(F.relu(self.conv4(x)))
+
         # Flatten
         x = x.view(x.size(0), -1)
 

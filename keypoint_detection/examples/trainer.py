@@ -70,7 +70,8 @@ class Trainer:
             f.write("Learning Rate: {}\n".format(self.lr))
             f.write("Batch Size: {}\n".format(self.batch_size))
             f.write("Loss Function: {}\n".format(self.type))
-
+            f.write("Optimizer: {}\n".format(self.opt))
+            f.write("\n")
             f.write("Network Summary\n")
             f.write(str(self.net))
 

@@ -4,9 +4,7 @@ import torch.nn.functional as F
 # Define Network
 class Net(nn.Module):
 
-    def __init__(self, image_size):
-
-        self.im_size = image_size
+    def __init__(self):
 
         super(Net, self).__init__()
 

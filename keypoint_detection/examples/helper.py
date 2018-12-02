@@ -6,6 +6,29 @@ import numpy as np
 from pathlib import Path
 import re
 
+def sample_output(loader):
+
+        # iterate through the test dataset
+        for i, sample in enumerate(loader):
+
+            # get sample data: images and ground truth keypoints
+            images = sample['image']
+            key_pts = sample['keypoints']
+
+            # convert images to FloatTensors
+            images = images.type(torch.FloatTensor)
+            print(images.shape)
+            # forward pass to get net output
+            output_pts = net(images)
+
+            # reshape to batch_size x 68 x 2 pts
+            output_pts = output_pts.view(output_pts.size()[0], 68, -1)
+
+            # break after first image is tested
+            if i == 0:
+                return images, output_pts, key_pts
+
+
 def show_all_keypoints(image, predicted_key_pts, gt_pts=None):
     """Show image with predicted keypoints"""
     # image is grayscale
@@ -14,7 +37,7 @@ def show_all_keypoints(image, predicted_key_pts, gt_pts=None):
     # plot ground truth points as green pts
     if gt_pts is not None:
         plt.scatter(gt_pts[:, 0], gt_pts[:, 1], s=20, marker='.', c='g')
-
+    
 
 def visualize_output(test_images, test_outputs, gt_pts=None, batch_size=10):
     for i in range(batch_size):
@@ -114,8 +137,7 @@ def create_chart():
             'title': {
                 'text': 'Loss'
             },
-            'lineWidth': 2,
-            'max': 1
+            'lineWidth': 2
         },
         'legend': {
             'enabled': True,
@@ -194,4 +216,5 @@ def summary_dict(path):
     if 'p' not in s: s['p'] = 0
     return s
 
-display_losses('./train')
+# display_losses('./train')
+# torch.load('./train/run')

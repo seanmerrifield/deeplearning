@@ -1,2 +1,5 @@
-# deeplearning
-Deep neural network library built on Tensorflow
+# Deep Learning
+Deep Learning is a collection of projects I have made using deep neural networks built on Tensorflow. 
+
+## Installation
+

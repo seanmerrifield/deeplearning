@@ -1,5 +1,5 @@
 # Deep Learning
-Deep Learning is a collection of projects I have made using deep neural networks built on Tensorflow. Tensorflow(https://www.tensorflow.org/api_docs/) is a deeplearning API built by Google.
+Deep Learning is a collection of projects I have made using deep neural networks built on Tensorflow. [Tensorflow](https://www.tensorflow.org/api_docs/) is a deeplearning API built by Google.
 
 ## Installation
 

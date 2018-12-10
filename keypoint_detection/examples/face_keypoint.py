@@ -43,7 +43,7 @@ if not Path(DOWNLOAD_PATH, DATA_FILE).exists():
 ### PREPARE DATA ###
 
 # order matters! i.e. rescaling should come before a smaller crop
-data_transform = transforms.Compose([Rescale(250),RandomCrop(224),Normalize(),ToTensor()])
+data_transform = transforms.Compose([Rescale(100),RandomCrop(96),Normalize(),ToTensor()])
 
 # create the transformed dataset
 transformed_dataset = FacialKeypointsDataset(csv_file='./data/training_frames_keypoints.csv',
@@ -67,7 +67,7 @@ test_dataset = FacialKeypointsDataset(csv_file='./data/test_frames_keypoints.csv
 
 # train network
 batch_size = 10
-n_epochs = 1 # start small, and increase when you've decided on your model structure and hyperparams
+n_epochs = 10 # start small, and increase when you've decided on your model structure and hyperparams
 lr = 0.001
 
 
@@ -78,8 +78,8 @@ trainer = Trainer(net, name="Training Run", root_dir=run_dir)
 
 trainer.train_set(transformed_dataset, batch_size)
 trainer.test_set(test_dataset, batch_size)
-trainer.loss_fn(trainer.MSE)
-trainer.optimizer(lr=lr)
+trainer.loss_fn(trainer.L1_SMOOTH)
+trainer.optimizer(trainer.ADAM, lr=lr)
 
 ### RUN INFERENCE IN TEST SET ###
 

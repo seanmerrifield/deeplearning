@@ -18,7 +18,12 @@ class Trainer:
     LOSS_PLOT = "loss.png"
 
     MSE = "Mean Squared Error"
+    L1 = "L1 Loss"
+    L1_SMOOTH = "Smooth L1 Loss"
     CROSS_ENTROPY = "Cross Entropy"
+
+    ADAM = "Adam Optimizer"
+    SGD = "Stochastic Gradient Descent"
 
     def __init__(self, net, name, root_dir=None, log_path=None):
 
@@ -65,7 +70,8 @@ class Trainer:
             f.write("Learning Rate: {}\n".format(self.lr))
             f.write("Batch Size: {}\n".format(self.batch_size))
             f.write("Loss Function: {}\n".format(self.type))
-
+            f.write("Optimizer: {}\n".format(self.opt))
+            f.write("\n")
             f.write("Network Summary\n")
             f.write(str(self.net))
 
@@ -111,24 +117,32 @@ class Trainer:
         """
         self.net = net
 
-    def optimizer(self, lr=0.001):
+    def optimizer(self, type, lr=0.001):
         """
         Sets Pytorch optimizer for training
-        @param lr:  Learning rate
+        @param type:    Optimization algorithm
+        @param lr:      Learning rate
         @return:    None
         """
         self.lr = lr
-        self.opt = optim.SGD(self.net.parameters(), lr=lr)
+        if type == self.ADAM:
+            self.opt = optim.Adam(self.net.parameters(), lr=lr)
+        elif type == self.SGD:
+            self.opt = optim.SGD(self.net.parameters(), lr=lr, momentum=0.9)
+        else:
+            raise Exception
 
     def loss_fn(self, type):
         """
         Sets Pytorch loss function for training
-        @return:    None
+        @param type:    Type of loss function
+        @return:        None
         """
-        if  type == self.MSE:
-            self.type = type
-            self.loss = nn.MSELoss()
+        self.type = type
+        if  type == self.MSE: self.loss = nn.MSELoss()
         elif    type == self.CROSS_ENTROPY: self.loss = nn.CrossEntropyLoss()
+        elif    type == self.L1: self.loss = nn.L1Loss()
+        elif    type == self.L1_SMOOTH: self.loss = nn.SmoothL1Loss()
         else:
             raise Exception
 
@@ -150,11 +164,13 @@ class Trainer:
         self.loss_over_time = []
 
         for epoch in range(epochs):  # loop over the dataset multiple times
-
+            print("Epoch: ", epoch)
             running_loss = 0.0
 
             # train on batches of data, assumes you already have train_loader
             for batch_i, data in enumerate(self.train_loader):
+                print("Batch: ", batch_i)
+
                 # get the input images and their corresponding labels
                 images = data['image']
                 key_pts = data['keypoints']
@@ -190,7 +206,7 @@ class Trainer:
                     running_loss = 0.0
 
         self._log('INFO', "Finished training")
-        train_time = (start - time.time()) / 60.0
+        train_time = (time.time() - start) / 60.0
 
         self._log('INFO', "Training took {} minutes".format(train_time))
 
@@ -213,7 +229,7 @@ class Trainer:
         plt.xlabel('10\'s of batches')
         plt.ylabel('loss')
         plt.ylim(0, 1)  # consistent scale
-        plt.save_fig(str(Path(self.root, self.LOSS_PLOT)))
+        plt.savefig(str(Path(self.root, self.LOSS_PLOT)))
         return plt
 
     def sample_output(self):

@@ -6,9 +6,12 @@ Deep Learning is a collection of projects I have made using deep neural networks
 `miniconda` is a great python package management system which can be downloaded [here](https://conda.io/miniconda.html). Install this so that you can run `conda` commands from the command line. 
 
 Run the following commands from the command line terminal to download this repository and install the necessary python packages:
+
+1. Clone repository and repository submodules
 ```sh
 git clone https://github.com/seanmerrifield/deeplearning
 cd deeplearning
+git submodule update --init
 ```
 
 

@@ -33,6 +33,7 @@ activate deeplearning
 pip install -r requirements.txt
 ```
 
-4. And that's it!
+
+5. And that's it!
 
 

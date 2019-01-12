@@ -1,5 +1,6 @@
 import tensorflow as tf
-import NeuralNetwork
+from image_classification import NeuralNetwork
+
 
 class ImageClassifier(NeuralNetwork):
 

@@ -1,6 +1,6 @@
 import unittest
-from image_manager import ImageManager
-from pathlib import Path
+from image_classification.image_manager import ImageManager
+
 
 class TestImageManager(unittest.TestCase):
 

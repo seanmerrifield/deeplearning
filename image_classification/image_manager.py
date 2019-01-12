@@ -1,4 +1,4 @@
-from file_manager import FileManager
+from image_classification.file_manager import FileManager
 import numpy as np
 import pickle
 import os

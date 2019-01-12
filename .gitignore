@@ -5,12 +5,13 @@ bicycle
 football
 venv
 data
+
 __pycache__
 object_detection/object_detection
 object_detection/models
-object_detection/training
+object_detection/training/*
 object_detection/__pycache__
 object_detection/.ipynb_checkpoints
-object_detection/images
+object_detection/images/*
 
 keypoint_detection/examples/train

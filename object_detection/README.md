@@ -3,16 +3,17 @@ Object detection can be used to locate objects within images. This is done using
 
 The Tensorflow Object Detection API installation instructions are replicated here for convenience.
 
-##Installation
+## Installation
 
 1. Follow the installation instructions at the root of this repository if you haven't already. 
 
-2. Change local directory to the object_detection folder
+2. The Object Detection API was automatically added to this repository as a submodule. First update the submodule to ensure the latest version, and change local directory to the API folder
 ```sh
-cd object_detection 
+git submodule update
+cd tensorflow/models/research
 ```
 
-3. The Tensorflow API uses Protobufs to configure model and training parameters. The protobufs are compiled using the following commands:
+3. The Object Detection API uses protobufs to configure model and training parameters. The protobufs are compiled using the following commands:
 
 * **Linux**
 ```sh
@@ -27,8 +28,11 @@ brew install protobuf
 protoc object_detection/protos/*.proto --python_out=.
 ```
 
-4. Add the Tensorflow Object Detection API libraries to the `PYTHONPATH`
+4. Add the Tensorflow Object Detection API libraries to `PYTHONPATH`. 
+
+Note that this command would have to be run everytime the terminal is started, but it can added to the `~/.bashrc` file, replacing pwd with an absolute path to deeplearning/tensorflow/models/research folder. 
 ```sh
+# From deeplearning/tensorflow/models/research
 export PYTHONPATH=$PYTHONPATH:`pwd`:`pwd`/slim
 ```
 

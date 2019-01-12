@@ -9,9 +9,8 @@ Run the following commands from the command line terminal to download this repos
 
 1. Clone repository and repository submodules
 ```sh
-git clone https://github.com/seanmerrifield/deeplearning
+git clone --recurse-submodules https://github.com/seanmerrifield/deeplearning
 cd deeplearning
-git submodule update --init
 ```
 
 

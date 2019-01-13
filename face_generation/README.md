@@ -20,11 +20,11 @@ The principle idea behind GANs is that there are two networks, a generator and a
 - The generator makes fake data to pass to the discriminator
 - The discriminator takes in the fake data from the generator and real data from the training set and has to decipher whether the data is real or fake. 
 
-The generator is trained to fool the discriminator, such that the data it produces is as similar to the real data as possible. The discriminator is trained to decipher which data is real and which is fake. 
+The generator is trained to fool the discriminator, such that the data it produces is as similar to the real data as possible. The discriminator is trained to decipher which data is real and which is fake. Once the two networks have been trained, the generator can be used generate new data that replicates the real data as much as possible. 
 
 ![GAN_Model](./images/gan_diagram.png)
 
-GAN model architecture [credit Udacity.com]
+GAN model architecture [Credit: [Skymind](https://skymind.ai/wiki/generative-adversarial-network-gan)]
 
 ## Model
 

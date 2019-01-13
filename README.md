@@ -33,6 +33,6 @@ pip install -r requirements.txt
 ```
 
 
-5. And that's it!
+5. And that's it! Check out each of the project folders to see the various types of problems that can be solved using Deep Learning and Tensorflow.
 
 

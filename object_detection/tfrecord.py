@@ -178,7 +178,7 @@ class TFRecord:
         with open(os.path.join(save_dir, 'label_map.pbtxt'), 'w+') as f:
             for id, c in class_list:
                 f.write('item: {\n')
-                f.write('\tid: {}\n'.format(id))
+                f.write('\tid: {}\n'.format(id + 1))
                 f.write('\tclass: \'{}\'\n'.format(c))
                 f.write('}\n\n')
 

@@ -8,40 +8,40 @@ Deep Learning is a collection of projects I have made using deep neural networks
 Run the following commands from the command line terminal to download this repository and install the necessary python packages:
 
 1. Clone repository and repository submodules
-```sh
-git clone --recurse-submodules https://github.com/seanmerrifield/deeplearning
-cd deeplearning
-```
+  ```sh
+  git clone --recurse-submodules https://github.com/seanmerrifield/deeplearning
+  cd deeplearning
+  ```
 
 
 2. Create a new `conda` environment
-* **Linux or Mac**
-```sh
-conda create -n deeplearning python=3.6
-source activate deeplearning
-```
+  * **Linux or Mac**
+  ```sh
+  conda create -n deeplearning python=3.6
+  source activate deeplearning
+  ```
 
-* **Windows**
-```sh
-conda create -n deeplearning python=3.6
-activate deeplearning
-```
+  * **Windows**
+  ```sh
+  conda create -n deeplearning python=3.6
+  activate deeplearning
+  ```
 
 3. Install Tensorflow
-* **For machines that have CUDA-enabled GPU**
-```sh
-pip install tensorflow-gpu
-```
+  * **For machines that have CUDA-enabled GPU**
+  ```sh
+  pip install tensorflow-gpu
+  ```
 
-* **All other machines**
-```
-pip install tensorflow
-```
+  * **All other machines**
+  ```
+  pip install tensorflow
+  ```
 
-4. All dependent packages are installed from the requirements text file (including Tensorflow).
-```sh
-pip install -r requirements.txt
-```
+4. All other dependent packages are installed from the requirements text file.
+  ```sh
+  pip install -r requirements.txt
+  ```
 
 
 5. And that's it! Check out each of the project folders to see the various types of problems that can be solved using Deep Learning and Tensorflow.

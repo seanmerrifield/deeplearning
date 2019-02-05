@@ -27,7 +27,18 @@ conda create -n deeplearning python=3.6
 activate deeplearning
 ```
 
-3. All dependent packages are installed from the requirements text file (including Tensorflow).
+3. Install Tensorflow
+* **For machines that have CUDA-enabled GPU**
+```sh
+pip install tensorflow-gpu
+```
+
+* **All other machines**
+```
+pip install tensorflow
+```
+
+4. All dependent packages are installed from the requirements text file (including Tensorflow).
 ```sh
 pip install -r requirements.txt
 ```

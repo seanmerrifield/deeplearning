@@ -175,12 +175,12 @@ class TFRecord:
 
 
     def _create_label_map(self, class_list, save_dir):
-        with open(os.path.join(save_dir, 'label_map.pbtxt'), 'w+') as f:
+        with open(os.path.join(save_dir, 'label_map.pbtxt'), 'wb+') as f:
             for id, c in class_list:
-                f.write('item: {\n')
-                f.write('\tid: {}\n'.format(id + 1))
-                f.write('\tclass: \'{}\'\n'.format(c))
-                f.write('}\n\n')
+                f.write('item: {\n'.encode('utf-8'))
+                f.write('\tid: {}\n'.format(id + 1).encode('utf-8'))
+                f.write('\tclass: \'{}\'\n'.format(c).encode('utf-8'))
+                f.write('}\n\n'.encode('utf-8'))
 
 if __name__ == '__main__':
     data_dir = './data'

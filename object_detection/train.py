@@ -23,10 +23,22 @@ XML_DIR = Path(DATA_DIR, 'xml')
 
 
 #Model and Training Config File 
+DOWNLOAD_BASE = 'http://download.tensorflow.org/models/object_detection/'
 MODEL = 'faster_rcnn_inception_v2_coco_2018_01_28'
+model_file = MODEL + '.tar.gz'
 model_config = MODEL + '.config'
 model = Path(MODEL_DIR, model_config)
+PATH_TO_FROZEN_GRAPH = str(Path(MODEL_DIR, MODEL, 'frozen_inference_graph.pb'))
 
+
+if not Path(PATH_TO_FROZEN_GRAPH).exists():
+    opener = urllib.request.URLopener()
+    opener.retrieve(DOWNLOAD_BASE + MODEL_FILE, str(Path(MODEL_DIR, MODEL_FILE)))
+    tar_file = tarfile.open(str(Path(MODEL_DIR, MODEL_FILE)))
+    for file in tar_file.getmembers():
+      file_name = os.path.basename(file.name)
+      if 'frozen_inference_graph.pb' in file_name:
+        tar_file.extract(file, MODEL_DIR)
 
 #Setting training directory
 train_dir = Path(TRAIN_DIR)

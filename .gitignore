@@ -8,8 +8,6 @@ venv
 
 __pycache__
 
-object_detection/__pycache__
-object_detection/.ipynb_checkpoints
 
 
 keypoint_detection/examples/train

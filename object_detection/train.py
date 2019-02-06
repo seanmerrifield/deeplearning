@@ -1,17 +1,25 @@
 import os
 import subprocess
 import sys
+import tarfile
+import urllib
 from pathlib import Path
 from tfrecord import TFRecord
 from filehandler import FileHandler
 
+if Path.cwd().name == 'object_detection':
+    root = '..'
+else:
+    root = '.'
+
 #Path to Tensorflow API training script
-API_DIR = Path('tensorflow/models/research/object_detection')
+API_DIR = Path(root, 'tensorflow/models/research/object_detection')
 sys.path.append(str(API_DIR.parent.absolute()))
 TRAIN_SCRIPT = str((API_DIR / 'legacy' / 'train.py').absolute())
 
 
-os.chdir('./object_detection')
+#Ensure working directory is in object_detection folder
+os.chdir(str(Path(root,'object_detection'),absolute()))
 
 #Set Input Parameters
 DATA_DIR = './data'
@@ -33,8 +41,8 @@ PATH_TO_FROZEN_GRAPH = str(Path(MODEL_DIR, MODEL, 'frozen_inference_graph.pb'))
 
 if not Path(PATH_TO_FROZEN_GRAPH).exists():
     opener = urllib.request.URLopener()
-    opener.retrieve(DOWNLOAD_BASE + MODEL_FILE, str(Path(MODEL_DIR, MODEL_FILE)))
-    tar_file = tarfile.open(str(Path(MODEL_DIR, MODEL_FILE)))
+    opener.retrieve(DOWNLOAD_BASE + model_file, str(Path(MODEL_DIR, model_file)))
+    tar_file = tarfile.open(str(Path(MODEL_DIR, model_file)))
     for file in tar_file.getmembers():
       file_name = os.path.basename(file.name)
       if 'frozen_inference_graph.pb' in file_name:

@@ -14,8 +14,9 @@ from .object_detection.utils import visualization_utils as vis_util
 
 # What model to download.
 DATA_DIR = str(Path.cwd() / 'models')
-IMAGE_DIR = str(Path.cwd() / 'images')
-MODEL_NAME = 'ssd_mobilenet_v1_coco_2017_11_17'
+IMAGE_DIR = str(Path.cwd() / 'data' / 'tests')
+TRAIN_DIR = str(Path.cwd() / 'training' / 'run_04')
+MODEL_NAME = 'faster_rcnn_inception_v2_coco_2018_01_28'
 MODEL_FILE = MODEL_NAME + '.tar.gz'
 DOWNLOAD_BASE = 'http://download.tensorflow.org/models/object_detection/'
 
@@ -27,11 +28,11 @@ if not Path(MODEL_DIR).is_dir(): Path(MODEL_DIR).mkdir(parents=True, exist_ok=Tr
 PATH_TO_FROZEN_GRAPH = str(Path(MODEL_DIR, 'frozen_inference_graph.pb'))
 
 # List of the strings that is used to add correct label for each box.
-PATH_TO_LABELS = str(Path(DATA_DIR, 'mscoco_label_map.pbtxt'))
-
+PATH_TO_LABELS = str(Path(DATA_DIR, 'label_map.pbtxt'))
 
 # Number of classes the object detector can identify
-NUM_CLASSES = 90
+NUM_CLASSES = 50
+
 
 # Load the label map.
 # Label maps map indices to category names
@@ -120,3 +121,93 @@ for PATH_TO_IMAGE in Path(IMAGE_DIR).glob('**/*'):
 
     # All the results have been drawn on image. Now display the image.
     plt.imshow('Object detector', image)
+
+
+
+
+
+class Inference:
+
+    def __init__(self, image_dir, model_dir, model_name, label_path, n_classes):
+        assert Path(image_dir).exists(), "Image directory doesn't exist at {}".format(image_dir)
+        assert Path(label_path).exists(), "Label map path doesn't exist at {}".format(label_path) 
+
+        self.image_dir = image_dir
+        self.model_dir = model_dir
+        self.model_name = model_name
+        self.label_path = label_path
+        self.n_classes = n_classes
+
+        #Get tensorflow graph
+        self.model = Model(model_dir, model_name, n_classes)
+        self.graph, self.sess = self.model.get_graph()
+
+        self.get_tensors()
+
+        # Load the label map.
+        # Label maps map indices to category names
+        self.label_map = label_map_util.load_labelmap(label_path)
+        self.categories = label_map_util.convert_label_map_to_categories(label_map, max_num_classes=n_classes, use_display_name=True)
+        self.category_index = label_map_util.create_category_index(categories)
+
+        self.vis_util = vis_util
+
+    def get_tensors(self):
+       # Input tensor is the image
+        self.image_tensor = detection_graph.get_tensor_by_name('image_tensor:0')
+
+        # Output tensors are the detection boxes, scores, and classes
+        # Each box represents a part of the image where a particular object was detected
+        self.detection_boxes = detection_graph.get_tensor_by_name('detection_boxes:0')
+
+        # Each score represents level of confidence for each of the objects.
+        # The score is shown on the result image, together with the class label.
+        self.detection_scores = detection_graph.get_tensor_by_name('detection_scores:0')
+        self.detection_classes = detection_graph.get_tensor_by_name('detection_classes:0')
+
+        # Number of objects detected
+        self.num_detections = detection_graph.get_tensor_by_name('num_detections:0')
+
+    def process_image(self, path):
+        # Load image using OpenCV and
+        # expand image dimensions to have shape: [1, None, None, 3]
+        # i.e. a single-column array, where each item in the column has the pixel RGB value
+        image = cv.imread(path)
+        if image is None or image.size == 0: return None
+
+        copied_image = np.copy(image)
+        copied_image = cv.cvtColor(copied_image, cv.COLOR_BGR2RGB)
+        image_expanded = np.expand_dims(image, axis=0)
+        plt.imshow(copied_image)
+        return image_expanded
+        
+
+    def detect(self, image_path):
+        image = self.process_image(image_path)
+
+        # Perform the actual detection by running the model with the image as input
+        (boxes, scores, classes, num) = sess.run(
+            [self.detection_boxes, self.detection_scores, self.detection_classes, self.num_detections],
+            feed_dict={image_tensor: image})
+
+        self.vis_util.visualize_boxes_and_labels_on_image_array(
+            image,
+            np.squeeze(boxes),
+            np.squeeze(classes).astype(np.int32),
+            np.squeeze(scores),
+            category_index,
+            use_normalized_coordinates=True,
+            line_thickness=8,
+            min_score_thresh=0.80)
+
+        return image
+
+
+
+if __name__ == "__main__":
+    # Setup paths
+    DATA_DIR = str(Path.cwd() / 'models')
+    IMAGE_DIR = str(Path.cwd() / 'data' / 'tests')
+    TRAIN_DIR = str(Path.cwd() / 'training' / 'run_04')
+    MODEL_NAME = 'faster_rcnn_inception_v2_coco_2018_01_28'
+

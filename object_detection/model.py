@@ -1,3 +1,9 @@
+import os
+import tensorflow as tf
+import tarfile
+import six.moves.urllib as urllib
+from pathlib import Path
+
 class Model:
 
     url = 'http://download.tensorflow.org/models/object_detection/'
@@ -45,7 +51,15 @@ class Model:
         #Uncompress file
         tar_file = tarfile.open(model_path)
         for file in tar_file.getmembers():
-        file_name = os.path.basename(file.name)
-        if 'frozen_inference_graph.pb' in file_name:
-            tar_file.extract(file, self.model_dir)
+            file_name = os.path.basename(file.name)
+            if 'frozen_inference_graph.pb' in file_name:
+                tar_file.extract(file, self.model_dir)
 
+
+
+if __name__ == "__main__":
+    MODEL_DIR = str(Path.cwd() / 'models')
+    MODEL_NAME = 'faster_rcnn_inception_v2_coco_2018_01_28'
+
+    model = Model(MODEL_DIR, MODEL_NAME, n_classes=5)
+    graph, sess = model.get_graph()

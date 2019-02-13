@@ -4,8 +4,7 @@ import sys
 import tarfile
 import urllib
 from pathlib import Path
-from tfrecord import TFRecord
-from filehandler import FileHandler
+
 
 if Path.cwd().name == 'object_detection':
     root = '..'
@@ -17,9 +16,11 @@ API_DIR = Path(root, 'tensorflow/models/research/object_detection')
 sys.path.append(str(API_DIR.parent.absolute()))
 TRAIN_SCRIPT = str((API_DIR / 'legacy' / 'train.py').absolute())
 
+from tfrecord import TFRecord
+from filehandler import FileHandler
 
 #Ensure working directory is in object_detection folder
-os.chdir(str(Path(root,'object_detection'),absolute()))
+os.chdir(str(Path(root,'object_detection').absolute()))
 
 #Set Input Parameters
 DATA_DIR = './data'

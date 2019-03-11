@@ -27,7 +27,17 @@ The Tensorflow Object Detection API installation instructions are replicated her
     brew install protobuf
     protoc object_detection/protos/*.proto --python_out=.
     ```
-* **Windows** - For Windows the protobufs need to be created manually
+* **Windows** - For Windows the protobuf installation is a bit more involved, they need to be installed and created manually. First download the latest release of the protobuf Python installer from [here](https://github.com/protocolbuffers/protobuf/releases/download/v3.7.0/protobuf-python-3.7.0.zip). Unzip the downloaded file and then run the following commands:
+    
+    ```sh
+    #From the folder where protobuf.exe is located
+    set PATH=$PATH;%cd%
+    
+    #Test that able to run the protoc command is working by running
+    protoc --version
+    ```
+    
+    Now change directory to `deeplearning\tensorflow\models\research` and run the following command to create all protobufs:
     ```sh
     #From deeplearning\tensorflow\models\research
     protoc --python_out=. .\object_detection\protos\anchor_generator.proto .\object_detection\protos\argmax_matcher.proto .\object_detection\protos\bipartite_matcher.proto .\object_detection\protos\box_coder.proto .\object_detection\protos\box_predictor.proto .\object_detection\protos\eval.proto .\object_detection\protos\faster_rcnn.proto .\object_detection\protos\faster_rcnn_box_coder.proto .\object_detection\protos\grid_anchor_generator.proto .\object_detection\protos\hyperparams.proto .\object_detection\protos\image_resizer.proto .\object_detection\protos\input_reader.proto .\object_detection\protos\losses.proto .\object_detection\protos\matcher.proto .\object_detection\protos\mean_stddev_box_coder.proto .\object_detection\protos\model.proto .\object_detection\protos\optimizer.proto .\object_detection\protos\pipeline.proto .\object_detection\protos\post_processing.proto .\object_detection\protos\preprocessor.proto .\object_detection\protos\region_similarity_calculator.proto .\object_detection\protos\square_box_coder.proto .\object_detection\protos\ssd.proto .\object_detection\protos\ssd_anchor_generator.proto .\object_detection\protos\string_int_label_map.proto .\object_detection\protos\train.proto .\object_detection\protos\keypoint_box_coder.proto .\object_detection\protos\multiscale_anchor_generator.proto .\object_detection\protos\graph_rewriter.proto

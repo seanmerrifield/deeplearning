@@ -43,7 +43,7 @@ The Tensorflow Object Detection API installation instructions are replicated her
     protoc --python_out=. .\object_detection\protos\anchor_generator.proto .\object_detection\protos\argmax_matcher.proto .\object_detection\protos\bipartite_matcher.proto .\object_detection\protos\box_coder.proto .\object_detection\protos\box_predictor.proto .\object_detection\protos\eval.proto .\object_detection\protos\faster_rcnn.proto .\object_detection\protos\faster_rcnn_box_coder.proto .\object_detection\protos\grid_anchor_generator.proto .\object_detection\protos\hyperparams.proto .\object_detection\protos\image_resizer.proto .\object_detection\protos\input_reader.proto .\object_detection\protos\losses.proto .\object_detection\protos\matcher.proto .\object_detection\protos\mean_stddev_box_coder.proto .\object_detection\protos\model.proto .\object_detection\protos\optimizer.proto .\object_detection\protos\pipeline.proto .\object_detection\protos\post_processing.proto .\object_detection\protos\preprocessor.proto .\object_detection\protos\region_similarity_calculator.proto .\object_detection\protos\square_box_coder.proto .\object_detection\protos\ssd.proto .\object_detection\protos\ssd_anchor_generator.proto .\object_detection\protos\string_int_label_map.proto .\object_detection\protos\train.proto .\object_detection\protos\keypoint_box_coder.proto .\object_detection\protos\multiscale_anchor_generator.proto .\object_detection\protos\graph_rewriter.proto
     ```
     
-4. Add the Tensorflow Object Detection API libraries to `PYTHONPATH`. Note that this command would have to be run everytime the terminal is started, but it can added to the `~/.bashrc` file, replacing pwd with an absolute path to deeplearning/tensorflow/models/research folder. 
+4. Add the Tensorflow Object Detection API libraries to `PYTHONPATH`. For Linux or Mac this command would have to be run everytime the terminal is started, but it can added to the `~/.bashrc` file, replacing pwd with an absolute path to `deeplearning/tensorflow/models/research` folder. 
 * **Linux or Mac**
     ```sh
     # From deeplearning/tensorflow/models/research
@@ -51,7 +51,8 @@ The Tensorflow Object Detection API installation instructions are replicated her
     ```
 * **Windows**
     ```sh
-    set PYTHONPATH=deeplearning\tensorflow\models\research;deeplearning\models\research\slim
+    # From deeplearning/tensorflow/models/research
+    setx PYTHONPATH=$PYTHONPATH;%cd%;%cd%\slim
     ```
 5. Test that the Tensorflow installation worked. If so you're good to go!
     ```sh

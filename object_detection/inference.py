@@ -153,9 +153,10 @@ class Inference:
         self.model_name = model_name
         self.label_path = label_path
         self.n_classes = n_classes
+        self.has_graph = False
 
         #Get tensorflow graph
-        self.model = Model(model_dir, model_name, n_classes)
+        self.model = Model(model_dir)
         self.graph, self.sess = self.model.get_graph()
 
         self.get_tensors()
@@ -167,6 +168,8 @@ class Inference:
         self.category_index = label_map_util.create_category_index(self.categories)
 
         self.vis_util = vis_util
+
+
 
     def get_tensors(self):
        # Input tensor is the image
@@ -231,9 +234,11 @@ if __name__ == "__main__":
     # Setup paths
     MODEL_DIR = str(Path.cwd() / 'models')
     DATA_DIR = str(Path.cwd() / 'data')
-    IMAGE_DIR = str(Path.cwd() / 'data' / 'test')
+
     GRAPH_DIR = str(Path.cwd() / 'training' / 'run_04' / 'inference_graph')
     MODEL_NAME = 'faster_rcnn_inception_v2_coco_2018_01_28'
+
+    IMAGE_DIR = str(Path(DATA_DIR, 'test'))
     LABEL_MAP = str(Path(DATA_DIR, 'label_map.pbtxt'))
 
     SAVE_DIR = Path(DATA_DIR, 'results')
@@ -242,6 +247,8 @@ if __name__ == "__main__":
 
     #Setup Inference instance for object detection
     inference = Inference(GRAPH_DIR, MODEL_NAME, LABEL_MAP, n_classes = 5)
+    if not inference.has_graph: inference.get_graph(MODEL_NAME) 
+
 
     for PATH_TO_IMAGE in Path(IMAGE_DIR).glob('*'):
         if not PATH_TO_IMAGE.is_file(): continue

@@ -54,45 +54,25 @@ In order to train an object detector, the API expects the input data to be in Te
 
 1. Label images with objects to detect. This can be easily done with software like [LabelImg](https://github.com/tzutalin/labelImg). LabelImg produces an xml file for each image that describes the bounding box and classification of each object. 
 
-2. Copy the images and the xml files to the `data` directory. At this point the images need to be separated into training and test images. The training and test images should be placed in `data/train` and `data/test`, respectively.
+2. Copy the images and the xml files to the `data` directory. The images and xml files should be placed in `data/images` and `data/xml`, respectively. 
 
-3. Convert XML inputs files to tf-record format, which are used as inputs for training.
+3. The final step is to adjust the parameters for training the model. This is all defined through a config file located in `models/faster_rcnn_inception_v2_coco_2018_01_28.config`. The object detection algorithm uses Faster RCNN pre-trained on the COCO image dataset. In the config file, adjust the following fields:
+- num_classes: The number of object classes to train
+- fine_tune_checkpoint: Absolute path where the pre-trained model checkpoint file is located stored (ex: `~/deeplearning/object_detection/models/faster_rcnn_inception_v2_coco_2018_01_28/model.ckpt`)
+- Adjust the train_input_reader file paths to `~/deepleraning/object_detection/data/train.record` and `~/deeplearning/object_detection/data/label_map.pbtxt`.
+
+    
+5. Run the training using the `train.py` file. This will start the training of the object detection model in the `training` directory. 
     ```sh
-    python xml_to_csv.py
-    python generate_tfrecord.py --csv_input=data/train_labels.csv --image_dir=data/train --output_path=data/train.record
-    python generate_tfrecord.py --csv_input=data/test_labels.csv --image_dir=data/test --output_path=data/test.record
+    python train.py
     ```
     
-4. Create a label map that describes the classification of each object and a numberical ID (starting from an ID of 1). Create a `label_map.pbtxt` file in the `training` folder using the following format:
-
-    ```
-    item {
-        name: "wall"
-        id: 1
-    }
-    item {
-        name: "window"
-        id: 2
-    }
-    item {
-        name: "door"
-        id: 3
-    }    
-    ```
-    
-5. Configure a pre-trained model
-
-6. Run the training using the `train.py` file in the Object Detection API folder. 
-    ```sh
-    python ../tensorflow/models/research/object_detection/legacy/train.py --logtostderr --train_dir=training/ --pipeline_config_path=training/faster_rcnn_inception_v2_pets.config
-    ```
-    
-7. Track the training progress and performance using tensorboard
+6. Track the training progress and performance using tensorboard
     ```sh
     tensorboard --logdir=training
     ```
     
-8. Save the model
+7. Save the model
     ```
     python export_inference_graph.py --input_type image_tensor --pipeline_config_path training/faster_rcnn_inception_v2_pets.config --trained_checkpoint_prefix training/model.ckpt-XXXX --output_directory inference_graph
     ```

@@ -1,4 +1,4 @@
 {
     "python.linting.pylintEnabled": false,
-    "python.pythonPath": "/miniconda3/envs/deeplearning/bin/python"
+    "python.pythonPath": "C:\\Users\\sean.merrifield\\AppData\\Local\\Continuum\\anaconda3\\envs\\deeplearning\\python.exe"
 }

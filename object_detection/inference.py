@@ -34,7 +34,7 @@ class Inference:
 
         #Get tensorflow graph
         self.model = Model(model_dir)
-        self.graph, self.sess = self.model.get_graph()
+        self.graph, self.sess = self.model.get_graph(self.model_name)
 
         self.get_tensors()
 
@@ -66,12 +66,10 @@ class Inference:
 
 
 
-    def process_image(self, path):
+    def process_image(self, image):
         # Load image using OpenCV and
         # expand image dimensions to have shape: [1, None, None, 3]
         # i.e. a single-column array, where each item in the column has the pixel RGB value
-        image = cv.imread(path)
-        if image is None or image.size == 0: return None
 
         copied_image = np.copy(image)
         copied_image = cv.cvtColor(copied_image, cv.COLOR_BGR2RGB)
@@ -81,8 +79,14 @@ class Inference:
         return image_expanded
         
 
-    def detect(self, image_path):
-        image = self.process_image(image_path)
+    def detect(self, image_path=None, image=None):
+        if image_path is None and image is None: return None, None
+        
+        if image_path:
+            image = cv.imread(path)
+            if image is None or image.size == 0: return None, None
+
+        image = self.process_image(image)
         if image is None: return None, None
 
         # Perform the actual detection by running the model with the image as input

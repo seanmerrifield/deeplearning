@@ -27,7 +27,7 @@ The Tensorflow Object Detection API installation instructions are replicated her
     brew install protobuf
     protoc object_detection/protos/*.proto --python_out=.
     ```
-* **Windows** - For Windows the protobuf installation is a bit more involved, they need to be installed and created manually. First download the latest release of the protobuf Python installer from [here](https://github.com/protocolbuffers/protobuf/releases/download/v3.7.0/protobuf-python-3.7.0.zip). Unzip the downloaded file and then run the following commands:
+* **Windows** - For Windows the protobuf installation is a bit more involved, they need to be installed and created manually. First download the latest release of the protobuf Python installer from [here](https://github.com/protocolbuffers/protobuf/releases/download/v3.7.0/protoc-3.7.0-win64.zip). Unzip the downloaded file and then run the following commands:
     
     ```sh
     #From the folder where protobuf.exe is located

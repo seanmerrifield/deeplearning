@@ -52,7 +52,7 @@ The Tensorflow Object Detection API installation instructions are replicated her
 * **Windows**
     ```sh
     # From deeplearning/tensorflow/models/research
-    setx PYTHONPATH=$PYTHONPATH;%cd%;%cd%\slim
+    set PYTHONPATH=$PYTHONPATH;%cd%;%cd%\slim
     ```
 5. Test that the Tensorflow installation worked. If so you're good to go!
     ```sh
